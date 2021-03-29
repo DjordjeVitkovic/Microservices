@@ -1,0 +1,9 @@
+keycloak:
+    security-constraints:
+    - null
+    -   authRoles:
+        - user
+        securityCollections:
+        -   name: application
+            patterns:
+            - /customers/*

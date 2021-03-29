@@ -1,0 +1,59 @@
+server:
+  port: 8989
+keycloak-client:
+  server-url: http://localhost:8080/auth
+  realm:  devnation
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: cloud-gateway
+            client-secret: 9c67f378-d92a-4197-b284-0265ef6d1a7f
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8989/login/oauth2/code/cloud-gateway
+            scope: openid
+        provider:
+          keycloak:
+            authorization-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/auth
+            token-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/token
+            user-info-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/userinfo
+            jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
+            user-name-attribute: name
+            user-info-authentication-method: header
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
+  cloud:
+    gateway:
+      routes:
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/order/**
+          filters:
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payment/**
+          filters:
+            - TokenRelay=
+            - RemoveRequestHeader=Cookie
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+
+#zuul:
+#  routes:
+#    microservice-consumer:
+#      serviceId: microservice-consumer
+#      path: /api/consume/**
