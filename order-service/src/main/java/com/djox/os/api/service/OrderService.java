@@ -6,6 +6,7 @@ import com.djox.os.api.common.TransactionResponse;
 import com.djox.os.api.entity.Order;
 import com.djox.os.api.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Lazy;
@@ -20,6 +21,7 @@ public class OrderService {
     private OrderRepository orderRepository;
 
     @Autowired
+    @Qualifier(value = "ribbon-template")
     @Lazy
     private RestTemplate restTemplate;
 
@@ -35,7 +37,7 @@ public class OrderService {
         payment.setOrderId(order.getId());
         payment.setAmount(order.getPrice());
         //rest call
-        Payment paymentResponse = restTemplate.postForObject("http://localhost:9191/payment/doPaymant", payment, Payment.class);
+        Payment paymentResponse = restTemplate.postForObject("http://PAYMENT-SERVICE/payment/doPayment", payment, Payment.class);
 
         responseMsg = (paymentResponse.getPaymentStatus().equalsIgnoreCase(
                 "success") ? "payment processing successful and order placed" : "there is failure in payment api, order added to cart");

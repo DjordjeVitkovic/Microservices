@@ -7,6 +7,8 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
+
 @SpringBootApplication
 @EnableEurekaClient
 public class OrderServiceApplication {
@@ -18,10 +20,18 @@ public class OrderServiceApplication {
     @Bean
     @LoadBalanced
     public RestTemplate restTemplate() {
-//        RestTemplate restTemplate = new RestTemplate();
-//        restTemplate.setInterceptors(Collections.singletonList(new RequestResponseHandlerInterceptor()));
-//        return restTemplate;
-        return new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setInterceptors(Collections.singletonList(new RequestResponseHandlerInterceptor()));
+        return restTemplate;
+        //return new RestTemplate();
+    }
+
+    @Bean("ribbon-template")
+    @LoadBalanced
+    public RestTemplate restTemplateWithRibbon() {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setInterceptors(Collections.singletonList(new RequestResponseHandlerInterceptor()));
+        return restTemplate;
     }
 
 //    @KeycloakConfiguration

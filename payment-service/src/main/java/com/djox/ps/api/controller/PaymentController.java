@@ -3,10 +3,12 @@ package com.djox.ps.api.controller;
 import com.djox.ps.api.entity.Payment;
 import com.djox.ps.api.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/payment")
+@RefreshScope
 public class PaymentController {
 
     @Autowired

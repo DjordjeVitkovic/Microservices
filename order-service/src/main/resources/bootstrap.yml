@@ -32,7 +32,7 @@ spring:
             client-id: cloud-gateway
             client-secret: 9c67f378-d92a-4197-b284-0265ef6d1a7f
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8989/login/oauth2/code/cloud-gateway
+            redirect-uri: http://localhost:8989/*
             scope: openid
         provider:
           keycloak:
@@ -46,6 +46,10 @@ spring:
         jwt:
           jwk-set-uri: ${keycloak-client.server-url}/realms/${keycloak-client.realm}/protocol/openid-connect/certs
 
+ribbon:
+  http:
+    client:
+      enabled: true
 
 management:
   endpoints:
