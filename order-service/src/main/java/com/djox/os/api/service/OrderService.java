@@ -26,7 +26,7 @@ public class OrderService {
     private RestTemplate restTemplate;
 
 
-//    @Value("${microservice.payment-service.endpoints.endpoint.uri}")
+    @Value("${microservice.payment-service.endpoints.endpoint.uri}")
     private String ENDPOINT_URL;
 
     public TransactionResponse saveOrder(TransactionRequest request) {
@@ -37,7 +37,7 @@ public class OrderService {
         payment.setOrderId(order.getId());
         payment.setAmount(order.getPrice());
         //rest call
-        Payment paymentResponse = restTemplate.postForObject("http://PAYMENT-SERVICE/payment/doPayment", payment, Payment.class);
+        Payment paymentResponse = restTemplate.postForObject(ENDPOINT_URL, payment, Payment.class);
 
         responseMsg = (paymentResponse.getPaymentStatus().equalsIgnoreCase(
                 "success") ? "payment processing successful and order placed" : "there is failure in payment api, order added to cart");

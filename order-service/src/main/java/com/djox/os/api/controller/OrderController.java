@@ -16,8 +16,8 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-//    @Value("${microservice.payment-service.endpoints.endpoint.uri}")
-    private String ENDPOINT_URL = "TEEEEEST";
+    @Value("${microservice.payment-service.endpoints.endpoint.uri}")
+    private String ENDPOINT_URL;
 
     @PostMapping("/bookOrder")
     public TransactionResponse bookOrder(@RequestBody TransactionRequest request){

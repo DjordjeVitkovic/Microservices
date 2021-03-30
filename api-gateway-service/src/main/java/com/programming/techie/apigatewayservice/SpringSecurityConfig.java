@@ -15,6 +15,7 @@ public class SpringSecurityConfig {
         // @formatter:off
         http
                 .authorizeExchange()
+                .pathMatchers("/order/test").permitAll()
                 .anyExchange().authenticated()
                 .and()
                 .oauth2Login()
